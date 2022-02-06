@@ -1,0 +1,43 @@
+{
+  "name": "lask",
+  "version": "0.0.0",
+  "private": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+  "bin": {
+    "lask": "./dist/cli.js"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "description": "A manager for build and dev.",
+  "author": "@steveruizok",
+  "scripts": {
+    "dev": "ts-node ./src/cli.ts -d",
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "build": "ts-node ./src/cli.ts",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@swc-node/jest": "^1.4.3",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@types/jest": "^26.0.22",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "commander": "^2.20.0",
+    "esbuild": "^0.14.18",
+    "eslint": "^7.32.0",
+    "jest": "^26.6.3",
+    "prettier-plugin-jsdoc": "^0.3.30",
+    "scripts": "*",
+    "ts-node": "^10.4.0",
+    "tsconfig": "*",
+    "tsconfig-replace-paths": "^0.0.11",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5",
+    "zlib": "^1.0.5"
+  }
+}

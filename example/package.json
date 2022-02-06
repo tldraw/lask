@@ -1,0 +1,21 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+  "bin": "./dist/cli.js",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "dev": "lask -d",
+    "build": "lask",
+    "clean": "rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "lask": "../"
+  }
+}
