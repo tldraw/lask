@@ -1,0 +1,18 @@
+# @format
+
+name: CI
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # install modules
+      - name: Install modules
+        run: yarn
+      # build
+      - name: Build Packages
+        run: yarn build
+      # run unit tests
+      - name: Jest Annotations & Coverage
+        run: yarn test:ci
