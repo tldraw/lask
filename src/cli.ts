@@ -2,6 +2,7 @@
 /** @format */
 
 import path from "path"
+import fs from "fs"
 import program, { Command } from "commander"
 import { lask } from "./lask"
 import type { Options } from "./lask"
@@ -21,17 +22,24 @@ const cli = program as CLI
 
 const { dev = false, node = false } = cli
 
-const options: Partial<Options> = {
-  isNode: node,
-  isDev: dev,
-}
+const options = {} as Partial<Options>
 
 try {
-  const config = require(path.join(process.cwd(), "lask.config.json"))
-  Object.assign(options, config)
-  console.log(options)
+  const cwd = path.join(process.cwd())
+  // Try to load a lask.config.json file
+  const configPath = path.join(cwd, "lask.config.json")
+  if (fs.existsSync(configPath)) {
+    const config = require(configPath)
+    Object.assign(options, config)
+  }
 } catch (e) {
-  console.log("no config")
+  // No config, noop
+} finally {
+  // Command line should override config
+  Object.assign(options, {
+    isNode: node,
+    isDev: dev,
+  })
 }
 
 lask(options)
