@@ -14,6 +14,10 @@
   ],
   "description": "A manager for build and dev.",
   "author": "@steveruizok",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tldraw/lask.git"
+  },
   "scripts": {
     "dev": "ts-node ./src/cli.ts -d -n",
     "clean": "rm -rf node_modules && rm -rf dist",
