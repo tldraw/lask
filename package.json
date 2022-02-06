@@ -1,6 +1,6 @@
 {
   "name": "lask",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "private": false,
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
