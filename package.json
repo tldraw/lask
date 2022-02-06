@@ -1,6 +1,6 @@
 {
   "name": "lask",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -18,7 +18,8 @@
     "dev": "ts-node ./src/cli.ts -d -n",
     "clean": "rm -rf node_modules && rm -rf dist",
     "build": "ts-node ./src/cli.ts -n",
-    "test": "jest"
+    "test": "jest",
+    "prepublish": "yarn build && yarn test"
   },
   "devDependencies": {
     "@swc-node/jest": "^1.4.3",
