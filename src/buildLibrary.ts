@@ -1,10 +1,10 @@
 /** @format */
 
-import fs from "fs"
-import path from "path"
-import { buildSync } from "esbuild"
-import { gzip } from "zlib"
-import { exec } from "child_process"
+import fs from 'fs'
+import path from 'path'
+import { buildSync } from 'esbuild'
+import { gzip } from 'zlib'
+import { exec } from 'child_process'
 
 export function buildLibrary({
   name,
@@ -23,7 +23,7 @@ export function buildLibrary({
   calculateSize: boolean
   entryPoints: string[]
   isNode: boolean
-  format: "esm" | "cjs" | ("esm" | "cjs")[]
+  format: 'esm' | 'cjs' | ('esm' | 'cjs')[]
   target: string
   tsconfig: string
   external: string[]
@@ -32,19 +32,16 @@ export function buildLibrary({
   const { log } = console
   try {
     // Build types
-    const dir = exec(
-      "tsc -p tsconfig.build.json --outFile dist/index.d.ts",
-      () => {
-        log(`✔ ${name}: Built types`)
-      }
-    )
+    const dir = exec('tsc -p tsconfig.build.json --outFile dist/index.d.ts', () => {
+      log(`✔ ${name}: Built types`)
+    })
 
     // Replace paths (if config / build config includes paths)
-    dir.on("exit", () => {
+    dir.on('exit', () => {
       const bcfg = require(tsconfig)
-      const cfg = require(path.join(process.cwd(), "tsconfig.json"))
+      const cfg = require(path.join(process.cwd(), 'tsconfig.json'))
       if (bcfg?.compilerOptions?.paths || cfg?.compilerOptions?.paths) {
-        exec("tsconfig-replace-paths --project tsconfig.build.json", () => {
+        exec('tsconfig-replace-paths --project tsconfig.build.json', () => {
           log(`✔ ${name}: Resolved paths`)
         })
       }
@@ -58,8 +55,8 @@ export function buildLibrary({
         external,
         define,
         format: fmt,
-        platform: isNode ? "node" : "neutral",
-        outExtension: { ".js": fmt === "esm" ? ".mjs" : ".js" },
+        platform: isNode ? 'node' : 'neutral',
+        outExtension: { '.js': fmt === 'esm' ? '.mjs' : '.js' },
         bundle: true,
         metafile: true,
         minify: false,
@@ -70,16 +67,16 @@ export function buildLibrary({
 
       if (calculateSize) {
         // Calculate the size of the output esm module (standard and zipped)
-        fs.readFile("./dist/index.mjs", (_err, data) => {
+        fs.readFile('./dist/index.mjs', (_err, data) => {
           gzip(data, (_err, result) => {
             const size = Object.values(buildResult.metafile!.outputs).reduce(
               (acc, { bytes }) => acc + bytes,
               0
             )
             log(
-              `✔ ${name}: Built ${fmt} package (${(size / 1000).toFixed(
-                1
-              )}kb / ${(result.length / 1000).toFixed(1)}kb gzipped)`
+              `✔ ${name}: Built ${fmt} package (${(size / 1000).toFixed(1)}kb / ${(
+                result.length / 1000
+              ).toFixed(1)}kb gzipped)`
             )
           })
         })

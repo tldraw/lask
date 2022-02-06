@@ -42,6 +42,7 @@ By default, `lask` expects your root directory to have:
 - a `tsconfig.json` file in the root directory
 - a `tsconfig.dev.json` file in the root directory
 - a `tsconfig.build.json` file in the root directory
+- a `package.json` with the following fields:
 
 You can configure `lask` by creating a `lask.config.json` (sorry) in your project's root directory.
 
@@ -52,6 +53,7 @@ interface Options {
   isDev: boolean
   isNode: boolean
   entryPoints: string[]
+  outDir: string
   clean: boolean
   external: {
     dependencies: boolean
@@ -75,6 +77,7 @@ For example:
   "isNode": true,
   "entryPoints": ["./src/index.ts"],
   "clean": true,
+  "outDir": "dist",
   "external": {
     "dependencies": true,
     "devDependencies": true,
@@ -90,6 +93,19 @@ For example:
 ### `isNode`
 
 Whether to build / develop for node, rather than neutral JavaScript.
+
+### `outDir`
+
+Where to place the output files. By default, this is `dist`. This means that your `package.json` should look like:
+
+```json
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
+```
+
+If you set a different value for `outDir`, be sure to also update those fields in your `package.json`.
 
 ### `buildConfig`
 

@@ -1,7 +1,7 @@
 /** @format */
 
-import { build } from "esbuild"
-import { exec } from "child_process"
+import { build } from 'esbuild'
+import { exec } from 'child_process'
 
 export async function devLibrary({
   name,
@@ -21,7 +21,7 @@ export async function devLibrary({
   isNode: boolean
   tsconfig: string
   external: string[]
-  format: "esm" | "cjs"
+  format: 'esm' | 'cjs'
   target: string
   define: Record<string, string>
 }) {
@@ -29,7 +29,7 @@ export async function devLibrary({
 
   log(`‣ ${name}: Starting watch mode`)
 
-  const dir = exec("tsc -w -p ./tsconfig.dev.json", (err, stdout, stderr) => {
+  const dir = exec('tsc -w -p ./tsconfig.dev.json', (err, stdout, stderr) => {
     log(`✔ ${name}: Built types`)
   })
 
@@ -41,8 +41,8 @@ export async function devLibrary({
       external,
       format,
       target,
-      platform: isNode ? "node" : "neutral",
-      outExtension: { ".js": ".mjs" },
+      platform: isNode ? 'node' : 'neutral',
+      outExtension: { '.js': '.mjs' },
       minify: false,
       bundle: true,
       treeShaking: true,

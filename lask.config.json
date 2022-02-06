@@ -4,6 +4,7 @@
     "./src/index.ts",
     "./src/cli.ts"
   ],
+  "outDir": "dist",
   "clean": true,
   "external": {
     "dependencies": true,

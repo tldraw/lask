@@ -1,23 +1,24 @@
 /** @format */
 
-import fs from "fs"
-import path from "path"
-import { buildLibrary } from "./buildLibrary"
-import { devLibrary } from "./devLibrary"
+import fs from 'fs'
+import path from 'path'
+import { buildLibrary } from './buildLibrary'
+import { devLibrary } from './devLibrary'
 
 export interface Options {
   isDev: boolean
   isNode: boolean
   entryPoints: string[]
   clean: boolean
+  outDir: string
   external: {
     dependencies: boolean
     devDependencies: boolean
     peerDependencies: boolean
   }
   target: string
-  format: "esm" | "cjs" | ("esm" | "cjs")[]
-  devFormat: "esm" | "cjs"
+  format: 'esm' | 'cjs' | ('esm' | 'cjs')[]
+  devFormat: 'esm' | 'cjs'
   devConfig: string
   buildConfig: string
   define: { [key: string]: string }
@@ -28,52 +29,53 @@ export async function lask(opts = {} as Partial<Options>) {
   const {
     isDev = false,
     isNode = false,
-    entryPoints = ["src/index.ts"],
+    entryPoints = ['src/index.ts'],
     clean = true,
-    devConfig = "tsconfig.dev.json",
-    buildConfig = "tsconfig.build.json",
-    devFormat = "esm",
-    format = ["cjs", "esm"],
-    target = "es6",
+    devConfig = 'tsconfig.dev.json',
+    buildConfig = 'tsconfig.build.json',
+    devFormat = 'esm',
+    format = ['cjs', 'esm'],
+    target = 'es6',
+    outDir = 'dist',
     external = {
       dependencies: true,
       devDependencies: true,
       peerDependencies: true,
     },
     define = {
-      "process.env.NODE_ENV": isDev ? '"development"' : '"production"',
+      'process.env.NODE_ENV': isDev ? '"development"' : '"production"',
     },
     calculateSize = true,
   } = opts
 
   const cwd = process.cwd()
-
-  // Delete dist
-  if (clean) {
-    if (fs.existsSync(path.join(cwd, "dist"))) {
-      fs.rmSync(path.join(cwd, "dist"), { recursive: true })
-    }
-  }
+  const pkg = require(path.join(cwd, 'package.json'))
 
   // Collect externals from package
-  const pkg = require(path.join(cwd, "package.json"))
   const externals = [
     ...(external.dependencies ? Object.keys(pkg.dependencies ?? {}) : []),
     ...(external.devDependencies ? Object.keys(pkg.devDependencies ?? {}) : []),
-    ...(external.peerDependencies
-      ? Object.keys(pkg.peerDependencies ?? {})
-      : []),
+    ...(external.peerDependencies ? Object.keys(pkg.peerDependencies ?? {}) : []),
   ]
-  const outDirAbs = path.join(cwd, "dist")
 
+  // Absolute path to out directory
+  const outDirAbs = path.join(cwd, outDir)
+
+  // Absolute path to config
   let configAbs = path.join(cwd, isDev ? devConfig : buildConfig)
   if (!fs.existsSync(configAbs)) {
-    configAbs = path.join(cwd, "tsconfig.json")
+    configAbs = path.join(cwd, 'tsconfig.json')
   }
 
-  const entryPointsAbs = entryPoints.map((entryPoint) =>
-    path.join(cwd, entryPoint)
-  )
+  // Absolute paths to entry points
+  const entryPointsAbs = entryPoints.map((entryPoint) => path.join(cwd, entryPoint))
+
+  // Delete dist
+  if (clean) {
+    if (fs.existsSync(outDirAbs)) {
+      fs.rmSync(outDirAbs, { recursive: true })
+    }
+  }
 
   if (isDev) {
     return devLibrary({

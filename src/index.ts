@@ -1,3 +1,3 @@
 /** @format */
 
-export * from "./lask"
+export * from './lask'
