@@ -5,9 +5,6 @@ import path from 'path'
 import { buildSync } from 'esbuild'
 import { gzip } from 'zlib'
 import { exec } from 'child_process'
-import { Options } from '~lask'
-
-export type C = Options
 
 export function buildLibrary({
   name,
@@ -52,7 +49,7 @@ export function buildLibrary({
         }
       }
       if (cfgWithPaths) {
-        exec(`tsconfig-replace-paths --project ${cfgWithPaths}`, () => {
+        exec(`tsconfig-replace-paths -p ${cfgWithPaths}`, () => {
           log(`✔ ${name}: Resolved paths`)
         })
       }

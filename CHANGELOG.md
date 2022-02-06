@@ -1,5 +1,9 @@
 <!-- @format -->
 
+## 0.0.15
+
+- Fix paths handling, remove logs.
+
 ## 0.0.11
 
 - Fix paths handling.
