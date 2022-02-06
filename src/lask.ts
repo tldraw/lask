@@ -65,7 +65,12 @@ export async function lask(opts = {} as Partial<Options>) {
       : []),
   ]
   const outDirAbs = path.join(cwd, "dist")
-  const configAbs = path.join(cwd, isDev ? devConfig : buildConfig)
+
+  let configAbs = path.join(cwd, isDev ? devConfig : buildConfig)
+  if (!fs.existsSync(configAbs)) {
+    configAbs = path.join(cwd, "tsconfig.json")
+  }
+
   const entryPointsAbs = entryPoints.map((entryPoint) =>
     path.join(cwd, entryPoint)
   )

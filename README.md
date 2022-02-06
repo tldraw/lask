@@ -119,6 +119,10 @@ Whether to build to `"esm"`, `"cjs"`, or `["cjs", "esm"]`. Defaults to `["cjs", 
 
 Whether to calculate the size of the output for each format. Defaults to `true`.
 
+## License
+
+This project is MIT licensed.
+
 ## Author
 
 - Steve Ruiz ([Github](https://github.com/steveruizok) / [Twitter](https://twitter.com/steveruizok))
