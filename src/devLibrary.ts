@@ -1,7 +1,7 @@
 /** @format */
 
 import { build, Format } from 'esbuild'
-import { spawn } from 'child_process'
+import { spawn, ChildProcessWithoutNullStreams } from 'child_process'
 
 export async function devLibrary({
   name,
@@ -26,16 +26,9 @@ export async function devLibrary({
 }) {
   const { log } = console
 
-  log(`‣ ${name}: Using ${tsconfig}`)
+  log(`‣ ${name}: Starting watch mode`)
 
-  const ts = spawn(`tsc`, [
-    `-w`,
-    `--project`,
-    tsconfig,
-    `--pretty`,
-    `--preserveWatchOutput`,
-    `--removeComments`,
-  ])
+  const ts = spawn(`tsc`, [`-w`, `--project`, tsconfig, `--pretty`, `--preserveWatchOutput`])
 
   const errRegex = /error(.*)TS/g
 
@@ -47,14 +40,12 @@ export async function devLibrary({
   })
 
   try {
-    log(`‣ ${name}: Starting watch mode`)
+    log(`‣ ${name}: Starting incremental build`)
 
     const format = ['cjs', 'esm']
 
     // Build packages
     ;(Array.isArray(format) ? format : [format]).forEach((fmt) => {
-      console.log('building', fmt)
-
       const extension = fmt === 'esm' ? '.mjs' : '.js'
       build({
         entryPoints,
@@ -87,70 +78,3 @@ export async function devLibrary({
     process.exit(1)
   }
 }
-
-// /** @format */
-
-// import { build } from 'esbuild'
-// import { exec } from 'child_process'
-
-// export async function devLibrary({
-//   name,
-//   isNode,
-//   outdir,
-//   format,
-//   tsconfig,
-//   external,
-//   target,
-//   define,
-//   entryPoints,
-// }: {
-//   name: string
-//   outdir: string
-//   calculateSize: boolean
-//   entryPoints: string[]
-//   isNode: boolean
-//   tsconfig: string
-//   external: string[]
-//   format: 'esm' | 'cjs'
-//   target: string
-//   define: Record<string, string>
-// }) {
-//   const { log } = console
-
-//   log(`‣ ${name}: Starting watch mode`)
-
-//   const dir = exec('tsc -w -p ./tsconfig.dev.json', (err, stdout, stderr) => {
-//     log(`✔ ${name}: Built types`)
-//   })
-
-//   try {
-//     build({
-//       entryPoints,
-//       outdir,
-//       tsconfig,
-//       external,
-//       format,
-//       target,
-//       platform: isNode ? 'node' : 'neutral',
-//       outExtension: { '.js': '.mjs' },
-//       minify: false,
-//       bundle: true,
-//       treeShaking: true,
-//       metafile: true,
-//       sourcemap: true,
-//       incremental: true,
-//       define,
-//       watch: {
-//         onRebuild(err) {
-//           if (err) {
-//             throw Error(`x ${name}: Rebuild failed`)
-//           }
-//           log(`✔ ${name}: Rebuilt package`)
-//         },
-//       },
-//     })
-//   } catch (err) {
-//     dir.kill()
-//     process.exit(1)
-//   }
-// }

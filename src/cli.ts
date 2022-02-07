@@ -10,19 +10,17 @@ import type { Options } from './lask'
 interface CLI extends Command {
   dev?: boolean
   node?: boolean
-  format?: string
 }
 
 program
   .version('0.0.0')
   .option('-d, --dev', 'Develop')
   .option('-n, --node', 'Node')
-  .option('-f, --format', 'Format')
   .parse(process.argv)
 
 const cli = program as CLI
 
-const { dev, node, format } = cli
+const { dev, node } = cli
 
 const options = {} as Partial<Options>
 
@@ -38,7 +36,6 @@ try {
   Object.assign(options, {
     isNode: options.isNode ?? node ?? false,
     isDev: options.isDev ?? dev ?? false,
-    format: options.format ?? format ?? ['esm', 'cjs'],
   })
 } catch (e) {
   // No config, noop

@@ -70,14 +70,20 @@ export async function lask(opts = {} as Partial<Options>) {
   // Absolute paths to entry points
   const entryPointsAbs = entryPoints.map((entryPoint) => path.join(cwd, entryPoint))
 
-  // Delete dist
-  if (clean) {
-    if (fs.existsSync(outDirAbs)) {
-      fs.rmSync(outDirAbs, { recursive: true })
-    }
-  }
-
   if (isDev) {
+    await buildLibrary({
+      name: pkg.name,
+      outdir: outDirAbs,
+      tsconfig: configAbs,
+      external: externals,
+      entryPoints: entryPointsAbs,
+      format,
+      target,
+      isNode,
+      define,
+      calculateSize,
+    })
+
     return devLibrary({
       name: pkg.name,
       outdir: outDirAbs,
@@ -91,6 +97,13 @@ export async function lask(opts = {} as Partial<Options>) {
       calculateSize,
     })
   } else {
+    // Delete dist
+    if (clean) {
+      if (fs.existsSync(outDirAbs)) {
+        fs.rmSync(outDirAbs, { recursive: true })
+      }
+    }
+
     return buildLibrary({
       name: pkg.name,
       outdir: outDirAbs,

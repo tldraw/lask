@@ -1,5 +1,4 @@
 {
-  "isNode": true,
   "entryPoints": [
     "./src/index.ts",
     "./src/cli.ts"
