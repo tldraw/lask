@@ -10,17 +10,19 @@ import type { Options } from './lask'
 interface CLI extends Command {
   dev?: boolean
   node?: boolean
+  format?: string
 }
 
 program
   .version('0.0.0')
   .option('-d, --dev', 'Develop')
-  .option('-n, --node', 'Develop Node')
+  .option('-n, --node', 'Node')
+  .option('-f, --format', 'Format')
   .parse(process.argv)
 
 const cli = program as CLI
 
-const { dev = false, node = false } = cli
+const { dev, node, format } = cli
 
 const options = {} as Partial<Options>
 
@@ -32,14 +34,14 @@ try {
     const config = require(configPath)
     Object.assign(options, config)
   }
+
+  Object.assign(options, {
+    isNode: options.isNode ?? node ?? false,
+    isDev: options.isDev ?? dev ?? false,
+    format: options.format ?? format ?? ['esm', 'cjs'],
+  })
 } catch (e) {
   // No config, noop
-} finally {
-  // Command line should override config
-  Object.assign(options, {
-    isNode: node,
-    isDev: dev,
-  })
 }
 
 lask(options)

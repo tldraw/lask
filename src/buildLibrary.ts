@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { buildSync } from 'esbuild'
 import { gzip } from 'zlib'
-import { exec } from 'child_process'
+import { spawn } from 'child_process'
 
 export function buildLibrary({
   name,
@@ -32,12 +32,16 @@ export function buildLibrary({
   const { log } = console
   try {
     // Build types
-    const dir = exec(`tsc -p ${tsconfig} --outDir ${outdir}`, () => {
-      log(`✔ ${name}: Built types`)
+    const ts = spawn(`tsc`, [`--project`, tsconfig, `--outDir`, outdir])
+
+    ts.stdout.on('data', function (data: any) {
+      const str = data.toString()
+      log(`✔ ${name}: ${str}`)
     })
 
-    // Replace paths (if config / build config includes paths)
-    dir.on('exit', () => {
+    ts.on('exit', () => {
+      log(`✔ ${name}: Built types`)
+      // Replace paths (if config / build config includes paths)
       const base_cfg = require(path.join(process.cwd(), 'tsconfig.json'))
       let cfgWithPaths = ''
       if (base_cfg?.compilerOptions?.paths) {
@@ -49,7 +53,8 @@ export function buildLibrary({
         }
       }
       if (cfgWithPaths) {
-        exec(`tsconfig-replace-paths -p ${cfgWithPaths}`, () => {
+        const trp = spawn(`tsconfig-replace-paths`, [`-p`, cfgWithPaths])
+        trp.on('exit', () => {
           log(`✔ ${name}: Resolved paths`)
         })
       }
@@ -93,6 +98,6 @@ export function buildLibrary({
     })
   } catch (e) {
     log(`x ${name}: Build failed due to an error.`)
-    log(e)
+    // log(e)
   }
 }

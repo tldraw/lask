@@ -1,5 +1,9 @@
 <!-- @format -->
 
+## 0.0.16
+
+- Improve errors during dev.
+
 ## 0.0.15
 
 - Fix paths handling, remove logs.

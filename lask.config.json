@@ -3,22 +3,5 @@
   "entryPoints": [
     "./src/index.ts",
     "./src/cli.ts"
-  ],
-  "outDir": "dist",
-  "clean": true,
-  "external": {
-    "dependencies": true,
-    "devDependencies": true,
-    "peerDependencies": true
-  },
-  "devConfig": "tsconfig.dev.json",
-  "buildConfig": "tsconfig.build.json",
-  "define": {
-    "node.ENV": "production"
-  },
-  "format": [
-    "cjs",
-    "esm"
-  ],
-  "calculateSize": true
+  ]
 }
