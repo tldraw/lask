@@ -61,8 +61,8 @@ interface Options {
     peerDependencies: boolean
   }
   target: string
-  format: "esm" | "cjs" | ("esm" | "cjs")[]
-  devFormat: "esm" | "cjs"
+  format: 'esm' | 'cjs' | ('esm' | 'cjs')[]
+  devFormat: 'esm' | 'cjs'
   devConfig: string
   buildConfig: string
   define: { [key: string]: string }
@@ -134,6 +134,12 @@ Whether to build to `"esm"`, `"cjs"`, or `["cjs", "esm"]`. Defaults to `["cjs", 
 ### `calculateSize`
 
 Whether to calculate the size of the output for each format. Defaults to `true`.
+
+## Troubleshooting
+
+### Path aliases aren't being converted?
+
+Be sure that the `outDir` in your `tsconfig.json` (or `tsconfig.build.json`, etc.) is pointing to the correct folder. If you're outputting types to `./dist` but your `tsconfig.json` has an `outDir` set to `./dist/types`, the conversion won't work.
 
 ## License
 
