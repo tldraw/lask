@@ -64,6 +64,12 @@ export async function lask(opts = {} as Partial<Options>) {
   // Absolute path to config
   let configAbs = path.join(cwd, isDev ? devConfig : buildConfig)
   if (!fs.existsSync(configAbs)) {
+    const { log } = console
+    log(
+      `‣ ${pkg.name}: Could not find ${isDev ? 'dev' : 'build'} config file (${
+        isDev ? devConfig : buildConfig
+      }), using tsconfig.json.`
+    )
     configAbs = path.join(cwd, 'tsconfig.json')
   }
 
