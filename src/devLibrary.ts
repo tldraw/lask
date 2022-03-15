@@ -31,11 +31,17 @@ export async function devLibrary({
   const ts = spawn(`tsc`, [`-w`, `--project`, tsconfig, `--pretty`, `--preserveWatchOutput`])
 
   const errRegex = /error(.*)TS/g
+  const cleanRegex = /Found 0 errors\./g
+
+  let hasError = false
 
   ts.stdout.on('data', function (data: any) {
     const str = data.toString()
     if (errRegex.test(str)) {
+      hasError = true
       log(`‣ ${name}: ${str}`)
+    } else if (cleanRegex.test(str) && hasError) {
+      log(`‣ ${name}: TypeScript errors fixed.`)
     }
   })
 
