@@ -43,7 +43,7 @@ export function buildLibrary({
       }
 
       // Build types
-      const ts = spawn(`tsc`, [`--project`, tsconfig, `--outDir`, outdir])
+      const ts = spawn(`tsc`, [`--project`, tsconfig, `--outDir`, outdir], { shell: true })
 
       ts.stdout.on('data', function (data: any) {
         const str = data.toString()
@@ -64,7 +64,7 @@ export function buildLibrary({
           }
         }
         if (cfgWithPaths) {
-          const trp = spawn(`tsconfig-replace-paths`, [`-p`, cfgWithPaths])
+          const trp = spawn(`tsconfig-replace-paths`, [`-p`, cfgWithPaths], { shell: true })
           trp.on('exit', () => {
             log(`✔ ${name}: Resolved paths`)
             finish(true)
