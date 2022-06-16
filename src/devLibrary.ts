@@ -28,7 +28,9 @@ export async function devLibrary({
 
   log(`‣ ${name}: Starting watch mode`)
 
-  const ts = spawn(`tsc`, [`-w`, `--project`, tsconfig, `--pretty`, `--preserveWatchOutput`])
+  const ts = spawn(`tsc`, [`-w`, `--project`, tsconfig, `--pretty`, `--preserveWatchOutput`], {
+    shell: true,
+  })
 
   const errRegex = /error(.*)TS/g
   const cleanRegex = /Found 0 errors\./g
